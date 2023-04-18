@@ -45,7 +45,8 @@ to build the native library extension. The following files are relevant and will
 
 1. Adjust the implementation of `CVRPEvaluation` and related classes (i.e., `CVRP_*_data`) to your problem setting.
 2. Create bindings for any additional members, classes, and functions you've implemented (
-   cf. [pybind11](https://github.com/pybind/pybind11)).
+   cf. [pybind11](https://github.com/pybind/pybind11)). Make sure to use the pybind11 `smart_holder` branch. The example
+   sets this up automatically.
 3. Build and install the library using `pip install .` (or `pip install -e .` for development) or ship it as a wheel ``.
 4. (Optional) Generate type stubs for your library using [mypy](tools/stubgen.py).
 
