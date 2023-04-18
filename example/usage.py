@@ -56,14 +56,14 @@ def main(instance_name: str):
 def optimize_solution(evaluation: routingblocks.Evaluation, instance: routingblocks.Instance,
                       solution: routingblocks.Solution):
     # Create a local search solver
-    solver = routingblocks.LocalSearch(instance, evaluation, evaluation)
+    solver = routingblocks.LocalSearch(instance, evaluation, evaluation, routingblocks.BestImprovementPivotingRule())
     # Create some operators
     # Create the arc set - by default all arcs are included
     full_arc_set = routingblocks.ArcSet(len(instance))
     operators = [
-        routingblocks.SwapOperator_0_1(instance, full_arc_set),
-        routingblocks.SwapOperator_1_1(instance, full_arc_set),
-        routingblocks.InterRouteTwoOptOperator(instance, full_arc_set)
+        routingblocks.operators.SwapOperator_0_1(instance, full_arc_set),
+        routingblocks.operators.SwapOperator_1_1(instance, full_arc_set),
+        routingblocks.operators.InterRouteTwoOptOperator(instance, full_arc_set)
     ]
     # Optimize the solution (inplace)
     solver.optimize(solution, operators)

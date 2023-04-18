@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 include(CheckIPOSupported)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
 
 project(_${SKBUILD_PROJECT_NAME} VERSION ${SKBUILD_PROJECT_VERSION})
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
@@ -14,7 +15,12 @@ message(STATUS "Found python binary: ${Python_EXECUTABLE} (Version ${Python_VERS
 set(PYBIND11_PYTHON_VERSION ${Python_VERSION})
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 set(PYTHON_LIBS ${Python_LIBS})
-FIND_PACKAGE(pybind11 CONFIG REQUIRED)
+
+CPMAddPackage(
+        NAME pybind11
+        GITHUB_REPOSITORY pybind/pybind11
+        GIT_TAG smart_holder
+)
 
 file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
@@ -27,9 +33,9 @@ set(ROUTINGBLOCKS_LIB_NAME "${CMAKE_STATIC_LIBRARY_PREFIX}routingblocks${CMAKE_S
 # lib or lib64
 if (EXISTS "${Python_SITELIB}/routingblocks/${ROUTINGBLOCKS_LIB_NAME}")
     set(ROUTINGBLOCKS_LIB "${Python_SITELIB}/routingblocks/${ROUTINGBLOCKS_LIB_NAME}")
-else()
+else ()
     message(FATAL_ERROR "Could not find the routingblocks native library. Please install the routingblocks python package first.")
-endif()
+endif ()
 
 
 if (NOT IS_DIRECTORY ${ROUTINGBLOCKS_INCLUDE_BASE}/routingblocks)
@@ -45,6 +51,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${ROUTINGBLOCKS_INCLUDE_BASE}
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE "ROUTINGBLOCKS_EXT_MODULE_NAME=${PROJECT_NAME}")
 target_compile_definitions(${PROJECT_NAME} PRIVATE "ROUTINGBLOCKS_EXT_MODULE_VERSION=${PROJECT_VERSION}")
+target_compile_definitions(${PROJECT_NAME} PRIVATE "PYBIND11_USE_SMART_HOLDER_AS_DEFAULT")
 
 # Set up optimization flags
 if (CMAKE_COMPILER_IS_GNUCC)

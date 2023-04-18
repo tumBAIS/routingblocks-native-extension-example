@@ -122,8 +122,7 @@ class CVRPEvaluation
 PYBIND11_MODULE(ROUTINGBLOCKS_EXT_MODULE_NAME, m) {
     m.attr("__version__") = PREPROCESSOR_TO_STRING(ROUTINGBLOCKS_EXT_MODULE_VERSION);
 
-    auto cvrp_evaluation = pybind11::class_<CVRPEvaluation, routingblocks::Evaluation,
-                     std::shared_ptr<CVRPEvaluation>>(m, "CVRPEvaluation")
+    auto cvrp_evaluation = pybind11::class_<CVRPEvaluation, routingblocks::Evaluation>(m, "CVRPEvaluation")
         .def(pybind11::init<resource_t>())
         .def("concatenate", &CVRPEvaluation::concatenate)
         .def("compute_cost", &CVRPEvaluation::compute_cost)
